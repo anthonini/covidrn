@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout-main}"
+	xmlns:an="http://www.anthonini.com.br">
+	
+<head>
+	<link rel="stylesheet" type="text/css" th:href="@{/layout/vendors/bootstrap/css/bootstrap-datepicker.standalone.min.css}"/>
+</head>
+
+<body class="main">
+
+<th:block layout:fragment="content">
+	
+	<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+		<h1 class="display-4">Última Atualização</h1>
+		<p class="lead" th:unless="${ultimaAtualizacao}">Nenhuma atualização realizada.</p>
+		<p class="lead" th:if="${ultimaAtualizacao}">A última atualização foi realizada no dia [[${{ultimaAtualizacao}}]].</p>
+		<form th:action="@{/covidrn}" method="POST">
+			<button type="submit" class="btn btn-lg btn-outline-primary">Atualizar Agora</button>
+		</form>
+	</div>
+	
+	<div class="">
+		<canvas id="monthSaleChart" height="120" ></canvas>
+	</div>
+
+	<!-- <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+		<div class="col">
+			<div class="card mb-4 shadow-sm">
+				<div class="card-header">
+					<h4 class="my-0 fw-normal">Free</h4>
+				</div>
+				<div class="card-body">
+					<h1 class="card-title pricing-card-title">
+						$0 <small class="text-muted">/ mo</small>
+					</h1>
+					<ul class="list-unstyled mt-3 mb-4">
+						<li>10 users included</li>
+						<li>2 GB of storage</li>
+						<li>Email support</li>
+						<li>Help center access</li>
+					</ul>
+					<button type="button" class="w-100 btn btn-lg btn-outline-primary">Sign
+						up for free</button>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card mb-4 shadow-sm">
+				<div class="card-header">
+					<h4 class="my-0 fw-normal">Pro</h4>
+				</div>
+				<div class="card-body">
+					<h1 class="card-title pricing-card-title">
+						$15 <small class="text-muted">/ mo</small>
+					</h1>
+					<ul class="list-unstyled mt-3 mb-4">
+						<li>20 users included</li>
+						<li>10 GB of storage</li>
+						<li>Priority email support</li>
+						<li>Help center access</li>
+					</ul>
+					<button type="button" class="w-100 btn btn-lg btn-primary">Get
+						started</button>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card mb-4 shadow-sm">
+				<div class="card-header">
+					<h4 class="my-0 fw-normal">Enterprise</h4>
+				</div>
+				<div class="card-body">
+					<h1 class="card-title pricing-card-title">
+						$29 <small class="text-muted">/ mo</small>
+					</h1>
+					<ul class="list-unstyled mt-3 mb-4">
+						<li>30 users included</li>
+						<li>15 GB of storage</li>
+						<li>Phone and email support</li>
+						<li>Help center access</li>
+					</ul>
+					<button type="button" class="w-100 btn btn-lg btn-primary">Contact
+						us</button>
+				</div>
+			</div>
+		</div>
+	</div> -->
+</th:block>
+
+<th:block layout:fragment="extra-javascript">
+	<script th:src="@{/js/vendors/Chart.min.js}"></script>
+	<script th:src="@{/js/dashboard.charts.js}"></script>
+</th:block>
+
+</body>
+</html>
