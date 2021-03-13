@@ -2,7 +2,6 @@ package br.com.anthonini.covidrn.controller;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,35 +17,35 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.com.anthonini.arquitetura.controller.AbstractController;
 import br.com.anthonini.covidrn.model.DadoDiario;
 import br.com.anthonini.covidrn.service.DadoDiarioService;
+import br.com.anthonini.covidrn.service.exception.DadosJaAtualizadosException;
 
 @Controller
-@RequestMapping("/covidrn")
-public class CovidRNController extends AbstractController {
+@RequestMapping("/dashboard")
+public class DashBoardController extends AbstractController {
 
 	@Autowired
-	private DadoDiarioService DadoDiarioService;
+	private DadoDiarioService dadoDiarioService;
 	
 	@GetMapping
 	public ModelAndView index(ModelMap modelMap) throws IOException {
-		modelMap.addAttribute("ultimaAtualizacao", DadoDiarioService.getUltimaAtualizacao());
-		return new ModelAndView("index");
+		modelMap.addAttribute("ultimaAtualizacao", dadoDiarioService.getUltimaAtualizacao());
+		return new ModelAndView("dashboard");
 	}
 	
 	@PostMapping
 	public ModelAndView atualizar(ModelMap model, RedirectAttributes redirectAttributes) throws IOException, ParseException {
-		LocalDate ultimaAtualizacao = DadoDiarioService.getUltimaAtualizacao();
-		if(ultimaAtualizacao == null || ultimaAtualizacao.isBefore(LocalDate.now())) {
-			DadoDiarioService.atualizarDados();
+		try {
+			dadoDiarioService.atualizarDados();
 			addMensagemSucesso(redirectAttributes, "Dados atualizados com sucesso!");
-			return new ModelAndView("redirect:/covidrn");
-		}
-		
-		addMensagemInfo(model, "Dados já atualizados!");
-		return index(model);
+			return new ModelAndView("redirect:/");
+		} catch (DadosJaAtualizadosException e) {
+			addMensagemInfo(model, "Os dados atuais já são os mais recentes!");
+			return index(model);
+		}		
 	}
 	
-	@GetMapping("/totalByMonth")
+	@GetMapping("/totalCasosConfirmados")
 	public @ResponseBody List<DadoDiario> listTotalByMonth() throws IOException {
-		return DadoDiarioService.extrairDados();
+		return dadoDiarioService.extrairDados();
 	}
 }

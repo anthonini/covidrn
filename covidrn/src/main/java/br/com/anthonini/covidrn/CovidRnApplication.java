@@ -60,7 +60,7 @@ public class CovidRnApplication {
 
 		@Override
 		public void addViewControllers(ViewControllerRegistry registry) {
-			registry.addRedirectViewController("/", "/covidrn");
+			registry.addRedirectViewController("/", "/dashboard");
 		}
 	}
 }
