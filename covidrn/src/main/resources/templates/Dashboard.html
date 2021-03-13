@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout-main}"
+	xmlns:an="http://www.anthonini.com.br">
+	
+<head>
+	<link rel="stylesheet" type="text/css" th:href="@{/layout/vendors/bootstrap/css/bootstrap-datepicker.standalone.min.css}"/>
+</head>
+
+<th:block layout:fragment="content">
+	
+	<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+		<h1 class="display-4">Última Atualização</h1>
+		<p class="lead" th:unless="${ultimaAtualizacao}">Nenhuma atualização realizada.</p>
+		<p class="lead" th:if="${ultimaAtualizacao}">A última atualização foi realizada em [[${{ultimaAtualizacao}}]].</p>
+		<form th:action="@{/dashboard}" method="POST">
+			<button type="submit" class="btn btn-lg btn-outline-primary">Atualizar Agora</button>
+		</form>
+	</div>
+	
+	<canvas id="totalCasosConfirmadosCovidCanvas" height="235"></canvas>
+</th:block>
+
+<th:block layout:fragment="extra-javascript">
+	<script th:src="@{/js/vendors/Chart.min.js}"></script>
+	<script th:src="@{/js/index.charts.js}"></script>
+</th:block>
+
+</html>

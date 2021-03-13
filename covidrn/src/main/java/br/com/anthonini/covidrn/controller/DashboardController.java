@@ -21,7 +21,7 @@ import br.com.anthonini.covidrn.service.exception.DadosJaAtualizadosException;
 
 @Controller
 @RequestMapping("/dashboard")
-public class DashBoardController extends AbstractController {
+public class DashboardController extends AbstractController {
 
 	@Autowired
 	private DadoDiarioService dadoDiarioService;
@@ -29,7 +29,7 @@ public class DashBoardController extends AbstractController {
 	@GetMapping
 	public ModelAndView index(ModelMap modelMap) throws IOException {
 		modelMap.addAttribute("ultimaAtualizacao", dadoDiarioService.getUltimaAtualizacao());
-		return new ModelAndView("dashboard");
+		return new ModelAndView("Dashboard");
 	}
 	
 	@PostMapping
@@ -37,7 +37,7 @@ public class DashBoardController extends AbstractController {
 		try {
 			dadoDiarioService.atualizarDados();
 			addMensagemSucesso(redirectAttributes, "Dados atualizados com sucesso!");
-			return new ModelAndView("redirect:/");
+			return new ModelAndView("redirect:/dashboard");
 		} catch (DadosJaAtualizadosException e) {
 			addMensagemInfo(model, "Os dados atuais já são os mais recentes!");
 			return index(model);
