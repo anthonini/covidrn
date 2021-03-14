@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+/dados_diarios.csv
+/ultima_atualizacao.txt

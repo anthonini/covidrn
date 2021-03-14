@@ -27,6 +27,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import br.com.anthonini.covidrn.dto.PeriodoDTO;
 import br.com.anthonini.covidrn.model.DadoDiario;
 import br.com.anthonini.covidrn.parameters.DadoDiarioParameters;
 import br.com.anthonini.covidrn.service.exception.DadosJaAtualizadosException;
@@ -88,7 +89,17 @@ public class DadoDiarioService {
 		}
 		
 		return null;
-	}	
+	}
+	
+	public PeriodoDTO getPrimeiroDiaUltimoDia() throws IOException {	
+		List<DadoDiario> dados = extrairDados();
+		
+		PeriodoDTO primeiroDiaUltimoDia = new PeriodoDTO();		
+		primeiroDiaUltimoDia.setInicio(dados.get(0).getData());
+		primeiroDiaUltimoDia.setFim(dados.get(dados.size()-1).getData());
+		
+		return primeiroDiaUltimoDia;
+	}
 	
 	private String converterParaCSV(String data, String total) {
 		return String.join(DadoDiarioParameters.SEPARADOR_CSV 
