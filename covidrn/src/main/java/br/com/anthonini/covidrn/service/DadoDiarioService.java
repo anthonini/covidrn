@@ -101,6 +101,11 @@ public class DadoDiarioService {
 		return primeiroDiaUltimoDia;
 	}
 	
+	public byte[] getCSV() throws IOException {
+		Path path = Paths.get(DadoDiarioParameters.LOCAL_ARQUIVO_DADOS);
+		return Files.readAllBytes(path);
+	}
+	
 	private String converterParaCSV(String data, String total) {
 		return String.join(DadoDiarioParameters.SEPARADOR_CSV 
 				,data, total

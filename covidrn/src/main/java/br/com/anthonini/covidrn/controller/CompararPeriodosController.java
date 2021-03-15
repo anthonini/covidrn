@@ -1,13 +1,16 @@
 package br.com.anthonini.covidrn.controller;
 
+import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.Month;
+import java.nio.file.Paths;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -21,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.anthonini.arquitetura.controller.AbstractController;
 import br.com.anthonini.covidrn.dto.PeriodoDTO;
+import br.com.anthonini.covidrn.parameters.DadoDiarioParameters;
 import br.com.anthonini.covidrn.service.CompararPeriodoService;
 import br.com.anthonini.covidrn.service.exception.PeriodoException;
 
@@ -85,5 +89,16 @@ public class CompararPeriodosController extends AbstractController {
 	@GetMapping("/periodos")
 	public @ResponseBody List<PeriodoDTO> periodos() throws IOException {
 		return service.getPeriodos();
+	}
+	
+	@GetMapping(value = "/csv", produces = "text/csv")
+	public ResponseEntity<?> csv() {
+        File file = Paths.get(DadoDiarioParameters.LOCAL_ARQUIVO_DADOS).toFile();
+        
+        return ResponseEntity.ok()
+                .header("Content-Disposition", "attachment; filename=total_casos_confirmados_covid_19_rn.csv")
+                .contentLength(file.length())
+                .contentType(MediaType.parseMediaType("text/csv"))
+                .body(new FileSystemResource(file));
 	}
 }
