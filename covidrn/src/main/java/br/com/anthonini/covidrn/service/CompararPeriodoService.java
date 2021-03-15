@@ -2,12 +2,14 @@ package br.com.anthonini.covidrn.service;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.anthonini.covidrn.dto.PeriodoDTO;
+import br.com.anthonini.covidrn.model.DadoDiario;
 import br.com.anthonini.covidrn.parameters.DadoDiarioParameters;
 import br.com.anthonini.covidrn.service.exception.PeriodoException;
 import br.com.anthonini.covidrn.session.PeriodosSession;
@@ -24,6 +26,7 @@ public class CompararPeriodoService {
 	public void adicionarPeriodo(PeriodoDTO periodoDTO) throws IOException {
 		validarAdicaoPeriodo(periodoDTO);
 		session.adicionarPeriodoDTO(periodoDTO);
+		Collections.sort(session.getPeriodos());
 	}
 	
 	public List<PeriodoDTO> getPeriodos() {
@@ -36,6 +39,28 @@ public class CompararPeriodoService {
 	
 	public void removerPeriodo(Integer index) {
 		session.getPeriodos().remove(index.intValue());		
+	}
+	
+	public void calcularTotais() throws IOException {
+		List<DadoDiario> dadosDiarios = dadoDiarioService.extrairDados();
+		for(int i = 0; i < dadosDiarios.size(); i++) {
+			DadoDiario dado = dadosDiarios.get(i);
+			for(PeriodoDTO periodoDTO : session.getPeriodos()) {
+				if(periodoDTO.getInicio().equals(dado.getData())) {
+					if(i == 0)
+						periodoDTO.setTotalInicio(0);
+					else
+						periodoDTO.setTotalInicio(dadosDiarios.get(i-1).getTotal());
+				}
+				if(periodoDTO.getFim().equals(dado.getData())) {
+					periodoDTO.setTotalFim(dado.getTotal());
+				}
+			}
+		}
+	}
+	
+	public Integer getTotalGeral() {
+		return session.getPeriodos().stream().mapToInt(p -> p.getTotal()).sum();
 	}
 
 	private void validarAdicaoPeriodo(PeriodoDTO periodoDTO) throws IOException {

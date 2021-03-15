@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout-main}"
+	xmlns:an="http://www.anthonini.com.br">
+
+<th:block layout:fragment="content">
+	
+	<div class="pricing-header mx-auto text-center">
+		<h1 class="display-4">Resultados</h1>
+		<p class="lead" th:if="${periodos.empty}">Nenhum período adicionado.</p>
+		<th:block th:unless="${periodos.empty}">
+			<p class="lead" th:text="|Total de Casos Confirmados: ${{totalGeral}}|">Total: 15.000</p>
+		</th:block>
+	</div>
+	
+	<th:block th:unless="${periodos.empty}">
+		<div class="card-deck mb-3 text-center">
+			<div class="card mb-4 box-shadow">
+				<div class="card-body">
+					<canvas id="donutChart" style="width: 100%; height: 300px"></canvas>
+				</div>
+			</div>
+	    </div>
+	    
+	    <div class="card-deck mb-3 text-center">		
+			<div class="card mb-4 box-shadow">
+				<div class="card-body">
+					<canvas id="barChart" style="width: 100%; height: 300px"></canvas>
+				</div>
+			</div>
+	    </div>
+	    
+	    <div class="card-deck mb-3 text-center">		
+			<div class="card mb-4 box-shadow">
+				<div class="card-body">
+					<canvas id="horizontalChart" style="width: 100%; height: 300px"></canvas>
+				</div>
+			</div>
+	    </div>
+		
+		<div class="card-deck mb-3 text-center">
+			<div class="card mb-4 box-shadow">
+				<div class="card-body">
+					<div class="card-block  text-center">
+				        <h1 class="display-5 text-primary">Resumo</h1>
+				        <p class="lead" th:text="|Total: ${{totalGeral}}|">Total: 15.000</p>
+	
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped table-sm">
+								<thead>
+									<tr>
+										<th>Período</th>
+										<th>Total de Casos no Período</th>
+										<th>%</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="periodo : ${periodos}">
+										<td th:text="|${{periodo.inicio}} - ${{periodo.fim}}|"></td>
+										<td th:text="${{periodo.total}}"></td>
+										<td th:text="|${#numbers.formatDecimal(((periodo.total*1.0)/totalGeral)*100, 2,2)}%|"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</th:block>
+</th:block>
+
+<th:block layout:fragment="extra-javascript">
+	<script th:src="@{/js/vendors/Chart.min.js}"></script>
+	<script th:src="@{/js/visualizar.js}"></script>
+</th:block>
+
+</html>

@@ -22,15 +22,19 @@ CovidRN.CasosConfirmadosCovid = (function() {
 			valores.push(dadoDiario.total);
 		});
 		
-		
+		var bar = document.getElementById("totalCasosConfirmadosCovidCanvas").getContext('2d');
+        var theme_g1 = bar.createLinearGradient(0, 0, 500, 0);
+        theme_g1.addColorStop(0, 'rgba(29, 233, 182, 0.4)');
+        theme_g1.addColorStop(1, 'rgba(29, 196, 233, 0.5)');
+        
 		var monthSaleChart = new Chart(this.ctx, {
 		    type: 'line',
 		    data: {
 		    	labels: dias,
 		    	datasets: [{
 		    		label: 'Casos Confirmados',
-		    		backgroundColor: "rgba(26,179,148,0.5)",
-	                pointBorderColor: "rgba(26,179,148,1)",
+		    		backgroundColor: theme_g1,
+	                pointBorderColor: theme_g1,
 	                data: valores,
 	                pointRadius: 0,
 					lineTension: 0,

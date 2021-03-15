@@ -6,17 +6,36 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import br.com.anthonini.covidrn.parameters.DadoDiarioParameters;
 
-public class PeriodoDTO {
+public class PeriodoDTO implements Comparable<PeriodoDTO> {
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DadoDiarioParameters.FORMATO_DATAS)
 	@NotNull(message = "Início é obrigatório")
 	@DateTimeFormat(pattern=DadoDiarioParameters.FORMATO_DATAS)
 	private LocalDate inicio;
 	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DadoDiarioParameters.FORMATO_DATAS)
 	@NotNull(message = "Fim é obrigatório")
 	@DateTimeFormat(pattern=DadoDiarioParameters.FORMATO_DATAS)
 	private LocalDate fim;
+	
+	private Integer totalInicio;
+	
+	private Integer totalFim;
+	
+	public PeriodoDTO() {}
+
+	public PeriodoDTO(@NotNull(message = "Início é obrigatório") LocalDate inicio, @NotNull(message = "Fim é obrigatório") LocalDate fim) {
+		this.inicio = inicio;
+		this.fim = fim;
+	}
+
+	public Integer getTotal() {
+		return totalFim - totalInicio;
+	}
 
 	public LocalDate getInicio() {
 		return inicio;
@@ -32,6 +51,22 @@ public class PeriodoDTO {
 
 	public void setFim(LocalDate fim) {
 		this.fim = fim;
+	}
+
+	public Integer getTotalInicio() {
+		return totalInicio;
+	}
+
+	public void setTotalInicio(Integer totalInicio) {
+		this.totalInicio = totalInicio;
+	}
+
+	public Integer getTotalFim() {
+		return totalFim;
+	}
+
+	public void setTotalFim(Integer totalFim) {
+		this.totalFim = totalFim;
 	}
 
 	@Override
@@ -63,5 +98,15 @@ public class PeriodoDTO {
 		} else if (!inicio.equals(other.inicio))
 			return false;
 		return true;
+	}
+
+	@Override
+	public int compareTo(PeriodoDTO o) {
+		int compare = this.getInicio().compareTo(o.getInicio());
+		
+		if(compare == 0)
+			compare = this.getFim().compareTo(o.getFim());
+		
+		return compare;
 	}
 }

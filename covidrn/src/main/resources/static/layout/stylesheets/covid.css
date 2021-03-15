@@ -19,3 +19,112 @@
 .pricing-header {
   max-width: 700px;
 }
+
+.btn-success {
+	background-color: #1de9b6;
+    border-color: #1de9b6;
+}
+
+.btn-success:hover {
+    color: #fff;
+    background-color: #14cc9e;
+    border-color: #13c095;
+}
+
+.btn-success:not(:disabled):not(.disabled).active, 
+.btn-success:not(:disabled):not(.disabled):active, .show > .btn-success.dropdown-toggle {
+    color: #fff;
+    background-color: #13c095;
+    border-color: #12b58c;
+}
+
+.btn-outline-success {
+    color: #1de9b6;
+    background-color: transparent;
+    background-image: none;
+    border-color: #1de9b6;
+}
+
+.btn-outline-success:hover {
+    color: #fff;
+    background-color: #1de9b6;
+    border-color: #1de9b6;
+}
+
+.btn-outline-success:not(:disabled):not(.disabled).active, 
+.btn-outline-success:not(:disabled):not(.disabled):active, 
+.show > .btn-outline-success.dropdown-toggle {
+    color: #fff;
+    background-color: #1de9b6;
+    border-color: #1de9b6;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #04a9f5;
+    border-color: #04a9f5;
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: #038fcf;
+    border-color: #0386c3;
+}
+
+.btn-outline-primary {
+    color: #04a9f5;
+    background-color: transparent;
+    background-image: none;
+    border-color: #04a9f5;
+}
+
+.btn-outline-primary:hover {
+    color: #fff;
+    background-color: #04a9f5;
+    border-color: #04a9f5;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active, 
+.btn-primary:not(:disabled):not(.disabled):active, .show > .btn-primary.dropdown-toggle {
+    color: #fff;
+    background-color: #0386c3;
+    border-color: #037eb6;
+}
+
+body {
+	color: #888
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(4, 169, 245, 0.05);
+}
+
+.table-striped tbody tr:nth-of-type(2n+1) {
+    background-color: rgba(4, 169, 245, 0.05);
+}
+
+.input-group, .input-group-text {
+    background: #f4f7fa;
+}
+.text-danger {
+    color: #f44236!important;
+}
+.text-primary {
+    color: #04a9f5!important;
+}
+
+.alert-info {
+    color: #3b85a0;
+    border-color: #c9edf9;
+}
+
+.alert-success {
+    color: #299b85;
+    border-color: #c0f9eb;
+}
+
+.alert-danger {
+    color: #994442;
+    border-color: #fccac7;
+    background-color: #f8d7da;
+}

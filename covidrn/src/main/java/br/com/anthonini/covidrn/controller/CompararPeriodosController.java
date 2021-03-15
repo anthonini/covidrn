@@ -1,6 +1,9 @@
 package br.com.anthonini.covidrn.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -28,7 +32,7 @@ public class CompararPeriodosController extends AbstractController {
 	private CompararPeriodoService service;
 	
 	@GetMapping
-	public ModelAndView form(PeriodoDTO periodoDTO, ModelMap modelMap) throws IOException {
+	public ModelAndView form(PeriodoDTO periodoDTO, ModelMap modelMap) throws IOException {		
 		modelMap.addAttribute("periodos", service.getPeriodos());
 		return new ModelAndView("Comparar-Periodos");
 	}
@@ -68,5 +72,18 @@ public class CompararPeriodosController extends AbstractController {
 		service.removerPeriodo(index);
 		addMensagemSucesso(redirectAttributes, "Período removido com sucesso!");
 		return new ModelAndView("redirect:/comparar-periodos");
+	}
+	
+	@GetMapping("/visualizar")
+	public ModelAndView visualizar(ModelMap modelMap) throws IOException {
+		service.calcularTotais();
+		modelMap.addAttribute("periodos", service.getPeriodos());
+		modelMap.addAttribute("totalGeral", service.getTotalGeral());
+		return new ModelAndView("Visualizar");
+	}
+	
+	@GetMapping("/periodos")
+	public @ResponseBody List<PeriodoDTO> periodos() throws IOException {
+		return service.getPeriodos();
 	}
 }
