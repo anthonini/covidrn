@@ -1,6 +1,7 @@
 package br.com.anthonini.covidrn.service;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
@@ -59,8 +60,27 @@ public class CompararPeriodoService {
 		}
 	}
 	
-	public Integer getTotalGeral() {
-		return session.getPeriodos().stream().mapToInt(p -> p.getTotal()).sum();
+	public Integer getTotalGeral() throws IOException {
+		Integer total = 0;
+		
+		List<DadoDiario> dadosDiarios = dadoDiarioService.extrairDados();
+		for(int i = 0; i < dadosDiarios.size(); i++) {
+			DadoDiario dado = dadosDiarios.get(i);
+			for(PeriodoDTO periodoDTO : session.getPeriodos()) {
+				if(isDataDentroPeriodo(dado.getData(), periodoDTO.getInicio(), periodoDTO.getFim())) {
+					Integer diferenca;
+					if(i == 0)
+						diferenca = dado.getTotal();
+					else
+						diferenca = dadosDiarios.get(i).getTotal() - dadosDiarios.get(i-1).getTotal();
+					
+					total += diferenca;
+					break;
+				}
+			}
+		}
+		
+		return total;
 	}
 
 	private void validarAdicaoPeriodo(PeriodoDTO periodoDTO) throws IOException {
@@ -101,5 +121,9 @@ public class CompararPeriodoService {
 				throw new PeriodoException("Período já adicionado", true, true);
 			}
 		}
+	}
+	
+	private boolean isDataDentroPeriodo(LocalDate data, LocalDate inicio, LocalDate fim) {
+		return (data.equals(inicio) || data.isAfter(inicio)) && (data.isEqual(fim) || data.isBefore(fim));
 	}
 }

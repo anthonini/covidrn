@@ -61,7 +61,7 @@
 									<tr th:each="periodo : ${periodos}">
 										<td th:text="|${{periodo.inicio}} - ${{periodo.fim}}|"></td>
 										<td th:text="${{periodo.total}}"></td>
-										<td th:text="|${#numbers.formatDecimal(((periodo.total*1.0)/totalGeral)*100, 2,2)}%|"></td>
+										<td th:text="|${#numbers.formatDecimal(((periodo.total*1.0)/totalGeral)*100, 1,2)}%|"></td>
 									</tr>
 								</tbody>
 							</table>
