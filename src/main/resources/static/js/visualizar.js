@@ -97,14 +97,21 @@ CovidRN.Visualizar = (function(){
 							borderWidth: 2,
 						}
 					},
-					responsive: true,
+					responsive: false,
 					legend: {
 						position: 'top',
 					},
 					title: {
 						display: true,
 						text: 'Casos Confirmados'
-					}
+					},
+					 scales: {
+				        xAxes: [{
+				            ticks: {
+				                beginAtZero: true
+				            }
+				        }]
+				    }
 				}
 			});
 		
