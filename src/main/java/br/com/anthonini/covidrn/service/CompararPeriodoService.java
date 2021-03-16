@@ -84,6 +84,10 @@ public class CompararPeriodoService {
 	}
 
 	private void validarAdicaoPeriodo(PeriodoDTO periodoDTO) throws IOException {
+		if(dadoDiarioService.getUltimaAtualizacao() == null) {
+			throw new PeriodoException("Dados ainda não importados. Vá em Dashboard e Atualize Agora.", false, false);
+		}
+		
 		if(periodoDTO.getInicio().isAfter(periodoDTO.getFim())) {
 			throw new PeriodoException("Inicio não pode ser maior que o fim.", true,true);
 		}
