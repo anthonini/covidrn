@@ -5,7 +5,7 @@
 	
 	<groupId>br.com.anthonini</groupId>
 	<artifactId>covidrn</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 	<name>CovidRN</name>
 	<description>Extração dos dados da Covid do estado do Rio Grande do Norte</description>
