@@ -51,11 +51,11 @@ public class DadoDiarioService {
 	}
 	
 	public void atualizarDados() throws IOException, ParseException {
-		Document doc = Jsoup.connect(DadoDiarioParameters.URL_SERVICO_LOTERIAS).get();
+		Document doc = Jsoup.connect(DadoDiarioParameters.URL_DADOS_COVID).get();
 		
 		gravarUltimaAtualizacao(doc);
 		
-		Element scriptElement = doc.select("div#row-9 script").first();
+		Element scriptElement = doc.select("div#row-10 script").first();
 		
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode jsonNode = mapper.readTree(scriptElement.html());
