@@ -53,32 +53,33 @@ public class DadoDiarioService {
 	public void atualizarDados() throws IOException, ParseException {
 		Document doc = Jsoup.connect(DadoDiarioParameters.URL_DADOS_COVID).get();
 		
-		gravarUltimaAtualizacao(doc);
-		
-		Element scriptElement = doc.select("div#row-10 script").first();
+		verificarUltimaAtualizacao(doc);
+
+		Element scriptElement = doc.select("div#casos-positivos---diário script").first();
 		
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode jsonNode = mapper.readTree(scriptElement.html());
-		Iterator<JsonNode> datasIterator = jsonNode.get("x").get("hc_opts").get("xAxis").get("categories").elements();
 		Iterator<JsonNode> valoresIterator = jsonNode.get("x").get("hc_opts").get("series").get(0).get("data").elements();
 		
 		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat format2 = new SimpleDateFormat("dd/MM/yyyy");
 		StringBuilder fileString = new StringBuilder();
 		
-		while(datasIterator.hasNext()) {
-			String data = datasIterator.next().asText();
-			String valor = valoresIterator.next().asText();
+		while(valoresIterator.hasNext()) {
+			JsonNode valor = valoresIterator.next();
+			String data = valor.get("datas").asText();
+			String confirmados = valor.get("confirmados").asText();
 			
-			Date date = format1.parse(data);
-			
-			fileString.append(converterParaCSV(format2.format(date), valor));
+			Date date = format1.parse(data);			
+			fileString.append(converterParaCSV(format2.format(date), confirmados));
 		}
 		
 		Path path = Paths.get(DadoDiarioParameters.LOCAL_ARQUIVO_DADOS);
 		FileUtils.write(path.toFile(), fileString.toString(), Charset.defaultCharset());
+		
+		gravarUltimaAtualizacao(doc);
 	}
-	
+
 	public LocalDateTime getUltimaAtualizacao() throws IOException {
 		Path path = Paths.get(DadoDiarioParameters.LOCAL_ARQUIVO_ULTIMA_ATUALIZACAO);
 		if(Files.exists(path)) {
@@ -117,13 +118,19 @@ public class DadoDiarioService {
 		int indexBr = p.indexOf("<br>")+4;
 		String ultimaAtualizacaoString = p.substring(indexBr, p.indexOf("<br>", indexBr));
 		
+		Path path = Paths.get(DadoDiarioParameters.LOCAL_ARQUIVO_ULTIMA_ATUALIZACAO);
+		FileUtils.write(path.toFile(), ultimaAtualizacaoString, Charset.defaultCharset());
+	}
+	
+	private void verificarUltimaAtualizacao(Document doc) throws IOException {
+		String p = doc.select("p").first().html();
+		int indexBr = p.indexOf("<br>")+4;
+		String ultimaAtualizacaoString = p.substring(indexBr, p.indexOf("<br>", indexBr));
+		
 		LocalDateTime ultimaAtualizacao = LocalDateTime.parse(ultimaAtualizacaoString, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
 		LocalDateTime ultimaAtualizacaoLocal = getUltimaAtualizacao();
 		if(ultimaAtualizacaoLocal != null && ultimaAtualizacaoLocal.equals(ultimaAtualizacao)) {
 			throw new DadosJaAtualizadosException();
 		}
-		
-		Path path = Paths.get(DadoDiarioParameters.LOCAL_ARQUIVO_ULTIMA_ATUALIZACAO);
-		FileUtils.write(path.toFile(), ultimaAtualizacaoString, Charset.defaultCharset());
 	}
 }

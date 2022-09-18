@@ -41,6 +41,9 @@ public class DashboardController extends AbstractController {
 		} catch (DadosJaAtualizadosException e) {
 			addMensagemInfo(model, "Os dados atuais já são os mais recentes!");
 			return index(model);
+		} catch (Exception e) {
+			addMensagemErro(model, "Ocorreu um erro ao atualizar");
+			return index(model);
 		}		
 	}
 	
