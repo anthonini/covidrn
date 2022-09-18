@@ -14,6 +14,8 @@ public class DadoDiario {
 	@DateTimeFormat(pattern=DadoDiarioParameters.FORMATO_DATAS)
 	private LocalDate data;
 	
+	private Integer dia;
+	
 	private Integer total;
 
 	public LocalDate getData() {
@@ -22,6 +24,14 @@ public class DadoDiario {
 
 	public void setData(LocalDate data) {
 		this.data = data;
+	}
+
+	public Integer getDia() {
+		return dia;
+	}
+
+	public void setDia(Integer dia) {
+		this.dia = dia;
 	}
 
 	public Integer getTotal() {
