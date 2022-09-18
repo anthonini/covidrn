@@ -65,13 +65,16 @@ public class DadoDiarioService {
 		SimpleDateFormat format2 = new SimpleDateFormat("dd/MM/yyyy");
 		StringBuilder fileString = new StringBuilder();
 		
+		Integer total = 0;
+		
 		while(valoresIterator.hasNext()) {
 			JsonNode valor = valoresIterator.next();
 			String data = valor.get("datas").asText();
 			String confirmados = valor.get("confirmados").asText();
+			total += Integer.parseInt(confirmados);
 			
 			Date date = format1.parse(data);			
-			fileString.append(converterParaCSV(format2.format(date), confirmados));
+			fileString.append(converterParaCSV(format2.format(date), confirmados, total));
 		}
 		
 		Path path = Paths.get(DadoDiarioParameters.LOCAL_ARQUIVO_DADOS);
@@ -107,9 +110,9 @@ public class DadoDiarioService {
 		return Files.readAllBytes(path);
 	}
 	
-	private String converterParaCSV(String data, String total) {
+	private String converterParaCSV(String data, String totalDia, Integer total) {
 		return String.join(DadoDiarioParameters.SEPARADOR_CSV 
-				,data, total
+				,data, totalDia, total.toString()
 				,DadoDiarioParameters.DELIMITADOR_LINHA_CSV);
 	}
 	
